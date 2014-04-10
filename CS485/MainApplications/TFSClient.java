@@ -73,14 +73,20 @@ public class TFSClient extends Client {
 	}
 	
 	/**
-	 * Delete a directory 
+	 * Delete a directory and any subdirectories or files contained by the directory
 	 * @param dirPath directory path in the server side
-	 * @param option two options available: ONLY indicates that the directory is deleted only when
-	 * the directory is empty, ALL indicates that the directory and all its sub directories and folders are removed
 	 * @return
 	 */
-	public int delDir(String dirPath, int option) {
-		return 0;
+	public RETVAL delDir(String dirPath) {
+		File dir = new File(dirPath);
+	    if (!dir.exists()) return RETVAL.NOT_FOUND;
+	    if (dir.isDirectory()) {
+	    	for (File f : dir.listFiles()) delDir(f.getPath());
+	    		dir.delete();
+	    } else {
+	       dir.delete();
+	    } 
+		return RETVAL.NOT_FOUND;
 	}
 	
 	/**
