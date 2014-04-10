@@ -20,9 +20,6 @@ public class TFSMaster implements Runnable {
 
 	ServerSocket ss = null;
 
-	ObjectOutputStream oos; 
-	ObjectInputStream ois;
-
 	public TFSDir root;
 
 	public TFSMaster(){
@@ -31,7 +28,6 @@ public class TFSMaster implements Runnable {
 
 		//accept 6 clients.
 		SetupConnections();
-
 
 	}	
 
@@ -57,17 +53,8 @@ public class TFSMaster implements Runnable {
 
 			System.out.println("Waiting for Connection");
 			Socket socket = ss.accept();
-
-			oos = new ObjectOutputStream(socket.getOutputStream());
-			ois = new ObjectInputStream(socket.getInputStream());
-
-
-			/* Message msg = (Message) ois.readObject();
-			msg.printMessage();
-			oos.writeObject(msg);
-
-			System.out.println("Set up Socket"); */
-			//SetupThreads(socket);
+			SetupThreads(socket);
+			
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -76,24 +63,6 @@ public class TFSMaster implements Runnable {
 		Thread t = new Thread(this);
 		t.start();
 
-	}
-
-	public void WriteObject(Object obj){
-		try {
-			oos.writeObject(obj);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public Object ReadObject(){
-		try {
-			return ois.readObject();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	private RETVAL delete(String path) {
@@ -142,19 +111,18 @@ public class TFSMaster implements Runnable {
 	//main
 	public static void main(String[] args) {
 		TFSMaster master = new TFSMaster();
-
 	}
 
 	@Override
 	public void run() {
 
-		while(true){
+		/*while(true){
 
 			Message msg = (Message) ReadObject();
 
 			WriteObject(msg);
 
-		}
+		} */
 	}
 
 }

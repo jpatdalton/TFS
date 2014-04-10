@@ -20,6 +20,8 @@ public class Message implements Serializable {
 	
 	public byte [] bytes;
 	
+	public Message(){}
+	
 	public Message(OPERATION operation, SENDER sender, String senderIP, String absolutePath){
 		this.operation = operation;
 		this.sender = sender;

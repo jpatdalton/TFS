@@ -29,14 +29,25 @@ public abstract class Client implements Runnable {
 	public void SetupConnection(){
 		try {
 			socket = new Socket("localhost", 3434);
+		
 			oos = new ObjectOutputStream(socket.getOutputStream());
+			
+			Message msg = new Message(OPERATION.CREATE_DIR, SENDER.CLIENT, "IP", "PATH");
+			Write(msg);
+			
 			ois = new ObjectInputStream(socket.getInputStream());
+			msg = (Message) ReadStream();
+			msg.printMessage();
 			
-			Message msg = new Message(OPERATION.CREATE_DIR, SENDER.CLIENT, "12", "");
-			oos.writeObject(msg);
+			msg.operation = OPERATION.APPEND;
 			
-			Message obj = (Message) ois.readObject();
-			obj.printMessage();
+			Write(msg);
+			
+			msg.senderIP = "IPNUM6";
+			
+			Write(msg);
+			
+			
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -64,6 +75,7 @@ public abstract class Client implements Runnable {
 	public Object ReadStream(){
 		try{
 			return ois.readObject();
+			
 		}
 		catch(Exception e){
 			System.out.println("You Have Been Disconnected From the Server");
@@ -75,7 +87,9 @@ public abstract class Client implements Runnable {
 	public void Write(Object object){
 		try{
 			oos.writeObject(object);
-			oos.reset();
+			oos.flush();
+			
+			//oos.reset();
 		}
 		catch(Exception e){
 			e.printStackTrace();

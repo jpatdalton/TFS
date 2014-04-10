@@ -1,6 +1,7 @@
 
 package TestCases;
 
+import Enums.RETVAL;
 import MainApplications.*;
 
 
@@ -13,7 +14,11 @@ public class ConnorTest {
 		
 		TFSClient client = new TFSClient();
 		
-		client.createDir("1");
+		RETVAL ret = client.createDir("1");
+		ret = client.createDir("1");
+
+		System.out.println(ret.toString());
+		
 	}
 
 }
