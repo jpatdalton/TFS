@@ -17,15 +17,21 @@ public class ConnorTest {
 		RETVAL ret = client.createDir("1");
 		System.out.println(ret.toString());
 	
+		ret = client.createFile("1\\test.txt", 1000);
+		System.out.println(ret.toString());
+		
+		ret = client.delFile("1\\test.txt");
+		System.out.println(ret.toString());
+		
 		//RETVAL ret = client.createFile("1/test.txt, 1000");
 		
 		
-		ret = client.createDir("1\\1");
-		System.out.println(ret.toString());
-		ret = client.createDir("1\\1\\1");
-		System.out.println(ret.toString());
-		ret = client.delDir("1\\1\\1");
-		System.out.println(ret.toString());
+		//ret = client.createDir("1\\1");
+		//System.out.println(ret.toString());
+		//ret = client.createDir("1\\1\\1");
+		//System.out.println(ret.toString());
+		//ret = client.delDir("1\\1\\1");
+		//System.out.println(ret.toString());
 		
 		/*ret = client.delDir("1\\1");
 		System.out.println(ret.toString());
