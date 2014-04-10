@@ -78,15 +78,14 @@ public class TFSClient extends Client {
 	 * @return
 	 */
 	public RETVAL delDir(String dirPath) {
-		File dir = new File(dirPath);
-	    if (!dir.exists()) return RETVAL.NOT_FOUND;
-	    if (dir.isDirectory()) {
-	    	for (File f : dir.listFiles()) delDir(f.getPath());
-	    		dir.delete();
-	    } else {
-	       dir.delete();
-	    } 
-		return RETVAL.NOT_FOUND;
+		Message msg = new Message(OPERATION.DELETE_DIR, SENDER.CLIENT, ip, dirPath);
+		Write(msg);
+		
+		msg = (Message) ReadStream();
+		
+		//msg.printMessage();
+		
+		return msg.retValue;
 	}
 	
 	/**

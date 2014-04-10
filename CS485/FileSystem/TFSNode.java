@@ -11,7 +11,7 @@ public class TFSNode
 	//parent of this node
 	TFSNode parent;
 	//Directory/file name
-	String name;
+	public String name;
 	//Absolute path of this mode
 	String absolutePath;
 }
