@@ -37,7 +37,7 @@ public class TFSMaster implements Runnable {
 		boolean result = theDir.mkdir();
 
 		// TODO CLEAN OUT ROOT PER EACH RUN		
-		root = new TFSDir("C:\\CS485");
+		root = new TFSDir("C:\\CS485", null);
 
 	}
 

@@ -32,7 +32,7 @@ public abstract class Client implements Runnable {
 		
 			oos = new ObjectOutputStream(socket.getOutputStream());
 			
-			Message msg = new Message(OPERATION.CREATE_DIR, SENDER.CLIENT, "IP", "PATH");
+			Message msg = new Message(OPERATION.CREATE_DIR, SENDER.CLIENT, "PATH"); // TODO MAKE BLANK
 			Write(msg);
 			
 			ois = new ObjectInputStream(socket.getInputStream());
@@ -42,8 +42,6 @@ public abstract class Client implements Runnable {
 			msg.operation = OPERATION.APPEND;
 			
 			Write(msg);
-			
-			msg.senderIP = "IPNUM6";
 			
 			Write(msg);
 			

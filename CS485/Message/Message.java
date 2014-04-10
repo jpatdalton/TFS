@@ -11,8 +11,6 @@ public class Message implements Serializable {
 	public OPERATION operation;
 	public SENDER sender;
 	
-	public String senderIP;
-	
 	public String absolutePath;
 	
 	public long fileSize;
@@ -22,15 +20,14 @@ public class Message implements Serializable {
 	
 	public Message(){}
 	
-	public Message(OPERATION operation, SENDER sender, String senderIP, String absolutePath){
+	public Message(OPERATION operation, SENDER sender, String absolutePath){
 		this.operation = operation;
 		this.sender = sender;
-		this.senderIP = senderIP;
 		this.absolutePath = absolutePath;
 	}
 	
 	public void printMessage(){
-		System.out.println("From " + sender.toString() + " " + senderIP + ": " + operation.toString() + ": " + absolutePath);
+		System.out.println("From " + sender.toString() + ": " + operation.toString() + ": " + absolutePath);
 	}
 	
 }
