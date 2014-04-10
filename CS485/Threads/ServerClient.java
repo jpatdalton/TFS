@@ -75,16 +75,52 @@ public class ServerClient implements Runnable {
 		}	
 	}
 	
+	public void addDirectory(String path){
+		
+		String [] split = path.split(":?\\\\");
+		
+		TFSDir current = master.root;
+		
+		for(int i = 0; i < split.length - 1; i++){
+			int index = -1;
+			String str = split[i];
+			
+			for(int j = 0; j < current.subDirs.size(); j++){
+				TFSDir dir = current.subDirs.get(j);
+				if(dir.name.equals(str)){
+					index = j;
+					break;
+				}
+			}	
+			
+			current = current.subDirs.get(index);
+		}
+		
+		int lastSlash = path.lastIndexOf("\\");
+		String name = path.substring(lastSlash+1);
+		
+		current.subDirs.add(new TFSDir(name));
+	
+	}
+	
 	public RETVAL CheckPath(String absolutePath){
 		
 		String [] split = absolutePath.split(":?\\\\");
 		
-		int index;
 		TFSDir current = master.root;
 		
 		for(int i = 0; i < split.length - 1; i++){
+			int index = -1;
 			String str = split[i];
-			index = current.subDirs.indexOf(str);
+			
+			for(int j = 0; j < current.subDirs.size(); j++){
+				TFSDir dir = current.subDirs.get(j);
+				if(dir.name.equals(str)){
+					index = j;
+					break;
+				}
+			}
+			
 			if(index == -1)
 				return RETVAL.ERROR;
 			
@@ -93,7 +129,7 @@ public class ServerClient implements Runnable {
 		}
 		
 		for(TFSDir dir: current.subDirs){
-			if(dir.name.equalsIgnoreCase(split[split.length-1]))
+			if(dir.name.equals(split[split.length-1]))
 				return RETVAL.EXISTS;
 		}
 		
@@ -116,13 +152,7 @@ public class ServerClient implements Runnable {
 				File dir = new File(path);
 				dir.mkdir();
 				
-				int lastSlash = msg.absolutePath.lastIndexOf("\\");
-				String name = msg.absolutePath.substring(lastSlash+1);
-				
-				System.out.println(name);
-				
-				master.root.subDirs.add(new TFSDir(name));
-				
+				addDirectory(msg.absolutePath);
 			}
 			
 			msg.retValue = ret;

@@ -15,8 +15,10 @@ public class ConnorTest {
 		TFSClient client = new TFSClient();
 		
 		RETVAL ret = client.createDir("1");
-		ret = client.createDir("1");
-
+		System.out.println(ret.toString());
+		ret = client.createDir("1\\1");
+		System.out.println(ret.toString());
+		ret = client.createDir("1\\1\\1");
 		System.out.println(ret.toString());
 		
 	}

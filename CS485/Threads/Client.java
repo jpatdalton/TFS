@@ -87,9 +87,7 @@ public abstract class Client implements Runnable {
 	public void Write(Object object){
 		try{
 			oos.writeObject(object);
-			oos.flush();
-			
-			//oos.reset();
+			oos.reset();
 		}
 		catch(Exception e){
 			e.printStackTrace();

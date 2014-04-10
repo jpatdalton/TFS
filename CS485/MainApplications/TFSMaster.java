@@ -6,9 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
 import java.util.*;
-
 import Message.*;
 import Enums.*;
+
 import FileSystem.*;
 import Threads.*;
 
@@ -63,50 +63,6 @@ public class TFSMaster implements Runnable {
 		Thread t = new Thread(this);
 		t.start();
 
-	}
-	
-	// YET TO BE TESTED!!!
-	private RETVAL delete(String path) {
-		File dir = new File(path);
-	    if (!dir.exists()) return RETVAL.NOT_FOUND;
-	    // Delete if dirPath is a directory
-	    if (dir.isDirectory()) {
-	    	for (File f : dir.listFiles()) delete(f.getPath());
-	    	dir.delete();
-	    	
-	    	//Delete the dir from the TFSDir root
-	    	String[] split = path.split(":?////");
-	    	TFSDir current = root;
-	    	for (int i = 0; i < split.length-1; i++) {
-	    		for (int j = 0; j < current.subDirs.size(); j++) {
-	    			if (current.subDirs.get(j).name.equals(split[i]))
-	    				current = current.subDirs.get(j);
-	    		}
-	    	}
-	    	for (int i = 0; i < current.subDirs.size(); i++) {
-	    		if (current.subDirs.get(i).name.equals(split[split.length-1]))
-	    			current.subDirs.remove(i);
-	    	}
-	    	return RETVAL.OK;
-	    
-	    // Delete if dirPath is a file
-	    } else {
-	       dir.delete();
-	       //Delete the file from the TFSDir root
-	       String[] split = path.split(":?////");
-	       TFSDir current = root;
-	       for (int i = 0; i < split.length-1; i++) {
-	    		for (int j = 0; j < current.subDirs.size(); j++) {
-	    			if (current.subDirs.get(j).name.equals(split[i]))
-	    				current = current.subDirs.get(j);
-	    		}
-	    	}
-	    	for (int i = 0; i < current.subFiles.size(); i++) {
-	    		if (current.subFiles.get(i).name.equals(split[split.length-1]))
-	    			current.subFiles.remove(i);
-	    	}
-	    	return RETVAL.OK;
-	    } 
 	}
 
 	//main

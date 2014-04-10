@@ -80,14 +80,15 @@ public class TFSClient extends Client {
 	 * @return
 	 */
 	public RETVAL delDir(String dirPath) {
-		Message msg = new Message(OPERATION.DELETE_DIR, SENDER.CLIENT, ip, dirPath);
-		Write(msg);
-		
-		msg = (Message) ReadStream();
-		
-		//msg.printMessage();
-		
-		return msg.retValue;
+		File dir = new File(dirPath);
+	    if (!dir.exists()) return RETVAL.NOT_FOUND;
+	    if (dir.isDirectory()) {
+	    	for (File f : dir.listFiles()) delDir(f.getPath());
+	    		dir.delete();
+	    } else {
+	       dir.delete();
+	    } 
+		return RETVAL.NOT_FOUND;
 	}
 	
 	/**
@@ -108,36 +109,17 @@ public class TFSClient extends Client {
 		return null;
 	}
 	
-	/**  NOT YET TESTED!!!
+	/**
 	 * Append a byte array to the end of the file.
 	 * @param filePath path of this file in the TFS
 	 * @param object object needs to be appended
 	 * @return
 	 */
-	public RETVAL append(String filePath, byte[] bytes) {
-		try {
-		File file = new File(filePath);
-
-		//Create file if it doesnt exist
-		if(!file.exists()){
-			return RETVAL.NOT_FOUND;
-		} else {
-			
-			FileOutputStream output = new FileOutputStream(filePath, true);
-			try {
-			   output.write(bytes);
-			} finally {
-			   output.close();
-			}
-			
-			return RETVAL.OK;
-		}
-		} catch (Exception e) {
-			return RETVAL.ERROR;
-		}	
+	public int append(String filePath, byte[] bytes) {
+		return 0;
 	}
 	
-	/** NOT YET TESTED!!!!
+	/**
 	 * Read the data from a file at a specific location and length
 	 * @param filePath
 	 * @param offset
@@ -145,14 +127,7 @@ public class TFSClient extends Client {
 	 * @return
 	 */
 	public byte[] read(String filePath, int offset, int dataLength) {
-		byte[] stream = null;
-		try {
-			RandomAccessFile file = new RandomAccessFile(filePath, "r");
-			file.read(stream, offset, dataLength);
-			return stream;
-		} catch (Exception e) {
-			return stream;
-		}		
+		return null;
 	}
 	
 	/**

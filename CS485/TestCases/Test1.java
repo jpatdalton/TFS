@@ -24,13 +24,13 @@ public class Test1 extends Test {
 	public RETVAL execute() {
 		RETVAL ret;		// result return for each call to the TFS
 		
-		ret = tfsClient.createDir("1/");
+		ret = tfsClient.createDir("1");
 		if (ret != RETVAL.OK) {
 			return ret;
 		}
 		
 		this.count = 1;
-		ret = createSubDirs("/1");	
+		ret = createSubDirs("1");	
 		
 		return ret;
 	}
@@ -42,7 +42,7 @@ public class Test1 extends Test {
 		if (count > inputVal)
 			return RETVAL.OK;
 		
-		ret = tfsClient.createDir(path + "/" + dir1);
+		ret = tfsClient.createDir(path + "\\" + dir1);
 		if (ret != RETVAL.OK) {
 			return ret;
 		}
@@ -51,17 +51,17 @@ public class Test1 extends Test {
 		if (count > inputVal)
 			return RETVAL.OK;
 		
-		ret = tfsClient.createDir(path +"/" + dir2);
+		ret = tfsClient.createDir(path +"\\" + dir2);
 		if (ret != RETVAL.OK) {
 			return ret;
 		}
 		
-		ret = createSubDirs(path + "/" + dir1);
+		ret = createSubDirs(path + "\\" + dir1);
 		if (ret != RETVAL.OK) {
 			return ret;
 		}
 		
-		ret = createSubDirs(path + "/" + dir2);
+		ret = createSubDirs(path + "\\" + dir2);
 		if (ret != RETVAL.OK) {
 			return ret;
 		}
