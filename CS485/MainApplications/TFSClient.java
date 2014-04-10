@@ -48,7 +48,9 @@ public class TFSClient extends Client {
 		
 		msg = (Message) ReadStream();
 		
-		//msg.printMessage();
+		
+		
+		msg.printMessage();
 		
 		return msg.retValue;
 	}
