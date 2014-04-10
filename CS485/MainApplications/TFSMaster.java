@@ -65,6 +65,7 @@ public class TFSMaster implements Runnable {
 
 	}
 	
+	// YET TO BE TESTED!!!
 	private RETVAL delete(String path) {
 		File dir = new File(path);
 	    if (!dir.exists()) return RETVAL.NOT_FOUND;

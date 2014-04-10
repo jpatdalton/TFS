@@ -108,17 +108,36 @@ public class TFSClient extends Client {
 		return null;
 	}
 	
-	/**
+	/**  NOT YET TESTED!!!
 	 * Append a byte array to the end of the file.
 	 * @param filePath path of this file in the TFS
 	 * @param object object needs to be appended
 	 * @return
 	 */
-	public int append(String filePath, byte[] bytes) {
-		return 0;
+	public RETVAL append(String filePath, byte[] bytes) {
+		try {
+		File file = new File(filePath);
+
+		//Create file if it doesnt exist
+		if(!file.exists()){
+			return RETVAL.NOT_FOUND;
+		} else {
+			
+			FileOutputStream output = new FileOutputStream(filePath, true);
+			try {
+			   output.write(bytes);
+			} finally {
+			   output.close();
+			}
+			
+			return RETVAL.OK;
+		}
+		} catch (Exception e) {
+			return RETVAL.ERROR;
+		}	
 	}
 	
-	/**
+	/** NOT YET TESTED!!!!
 	 * Read the data from a file at a specific location and length
 	 * @param filePath
 	 * @param offset
@@ -126,7 +145,14 @@ public class TFSClient extends Client {
 	 * @return
 	 */
 	public byte[] read(String filePath, int offset, int dataLength) {
-		return null;
+		byte[] stream = null;
+		try {
+			RandomAccessFile file = new RandomAccessFile(filePath, "r");
+			file.read(stream, offset, dataLength);
+			return stream;
+		} catch (Exception e) {
+			return stream;
+		}		
 	}
 	
 	/**
