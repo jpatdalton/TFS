@@ -176,7 +176,7 @@ public class TFSClient extends Client {
 	}
 
 	public RETVAL writeFileLocally(String filePath, byte bytes[]){
-		
+
 		try {
 
 			System.out.println("APPEND: " + filePath);
@@ -203,9 +203,9 @@ public class TFSClient extends Client {
 		} catch (Exception e) {
 			return RETVAL.ERROR;
 		}	
-		
+
 	}
-	
+
 	public Message readFileLocally(String filePath){
 
 		byte[] data = SerializationHelper.getBytesFromFile(filePath);
@@ -224,9 +224,9 @@ public class TFSClient extends Client {
 
 	}
 
-	
 
-	
+
+
 	/**
 	 * Append a byte array to the end of the file.
 	 * @param filePath path of this file in the TFS
@@ -245,7 +245,7 @@ public class TFSClient extends Client {
 			int length = bytes.length;
 
 			int fileLength = (int)file.length();
-			
+
 			byte header [] = ByteBuffer.allocate(4).putInt(length).array();
 
 			//TODO SHOULD RECEIVE INFORMATION FROM SERVER AND BE ADDED TO END		
@@ -253,13 +253,13 @@ public class TFSClient extends Client {
 			if(!file.exists()){
 				return RETVAL.NOT_FOUND;
 			} else {
-				
+
 				FileOutputStream output = new FileOutputStream(filePath, true);
 				try {
-					
+
 					output.write(header); //TODO
 					output.write(bytes);
-					
+
 				} finally {
 					output.close();
 				}
@@ -302,11 +302,54 @@ public class TFSClient extends Client {
 
 	}
 
-	ArrayList<String> getSubdirectories(String absolutePath){
+	public int getNumberOfHaystackFiles(String absolutePath){
+
+
+		absolutePath = "C:\\CS485\\" + absolutePath;
+		File file = new File(absolutePath);
+
+		if(!file.exists())
+			return -1;
+
+
+		byte[] data = null;
+
+		byte header [] = new byte [4];
+
+		int offset = 0;
+		int fileCounter = 0;
 		
+		try {
+
+			FileInputStream input = new FileInputStream(file);
+			while(offset < file.length()){
+
+				input.read(header);
+				offset += 4;
+				ByteBuffer bb = ByteBuffer.wrap(header);
+				int dataSize = bb.getInt();
+				data = new byte[dataSize];
+				input.read(data);
+				offset += dataSize;
+				fileCounter++;
+			}
+
+			input.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return fileCounter;
+		
+	}
+
+
+	public ArrayList<String> getSubdirectories(String absolutePath){
+
 		File file = new File(absolutePath);
 		ArrayList<String> subdirectories = new ArrayList();
-		
+
 		if(file.exists() && file.isDirectory()){
 			File [] names = file.listFiles();
 			for(File f: names){
@@ -314,11 +357,11 @@ public class TFSClient extends Client {
 					subdirectories.add(f.getAbsolutePath());
 			}
 		}
-		
+
 		return subdirectories;
 
 	}
-	
+
 	/**
 	 * Counting the number of replicas for this file
 	 * @param filePath path of this file in the TFS

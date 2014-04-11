@@ -1,6 +1,9 @@
 
 package TestCases;
 
+import Enums.*;
+import MainApplications.*;
+
 /**
  * 
  * @author Nguyen
@@ -13,6 +16,17 @@ public class Test7 extends Test {
 		super(masterIpAddress, masterPort);
 		
 		this.tfsFilePath = tfsFilePath;
+	}
+
+	public RETVAL execute() {
+		int retVal = tfsClient.getNumberOfHaystackFiles(tfsFilePath);
+		
+		if(retVal == -1)
+			return RETVAL.NOT_FOUND;
+		
+		System.out.println("Number of Files: " + retVal);
+		
+		return RETVAL.OK;
 	}
 
 	/**
@@ -29,16 +43,11 @@ public class Test7 extends Test {
 		
 		Test7 test = new Test7(masterIpAddress, masterPort, filePath);
 		
-		test.execute();
+		RETVAL ret = test.execute();
+		test.handleError(ret);
+	
 	}
-
-	@Override
-	public int execute() {
-		int replicaCount = tfsClient.replicaCount(tfsFilePath);
-		
-		System.out.println("Replica count: " + replicaCount);
-		
-		return 0;
-	}
-
+	
+	
+	
 }
