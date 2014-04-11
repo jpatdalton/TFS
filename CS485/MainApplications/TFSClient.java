@@ -124,6 +124,9 @@ public class TFSClient extends Client {
 	 */
 	public RETVAL append(String filePath, byte[] bytes) {
 		try {
+			
+			filePath = "C:\\CS485\\" + filePath;
+			
 			File file = new File(filePath);
 
 			//TODO SHOULD RECEIVE INFORMATION FROM SERVER AND BE ADDED TO END		

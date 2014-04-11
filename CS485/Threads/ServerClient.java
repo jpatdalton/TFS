@@ -14,7 +14,6 @@ import FileSystem.*;
 
 public class ServerClient implements Runnable {
 
-
 	ObjectOutputStream oos = null;
 	ObjectInputStream ois = null;
 
@@ -302,6 +301,9 @@ public class ServerClient implements Runnable {
 			dir.mkdir();
 
 			addDirectory(absolutePath);
+			
+			ret = RETVAL.OK;
+			
 		}
 
 		return ret;
@@ -331,6 +333,9 @@ public class ServerClient implements Runnable {
 			}
 
 			addFile(absolutePath);
+			
+			ret = RETVAL.OK;
+			
 		}
 		
 		return ret;
