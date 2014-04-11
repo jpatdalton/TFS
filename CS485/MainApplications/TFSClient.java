@@ -3,6 +3,7 @@ package MainApplications;
 
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
 import java.util.Random;
 
 import Threads.*;
@@ -58,38 +59,36 @@ public class TFSClient extends Client {
 	 * @return
 	 */
 	public RETVAL createFile(String filePath, long size) {
-		
+
 		Message msg = new Message(OPERATION.CREATE_FILE, SENDER.CLIENT, filePath);
 		msg.fileSize = size;
 		Write(msg);
 		msg = (Message) ReadStream();
-		
+
 		msg.printMessage();
-		
+
 		return msg.retValue;
 	}
 
 	public RETVAL createFileLocally(String filePath){
-		
+
 		File file = new File(filePath);
 		if(file.exists())
 			return RETVAL.EXISTS;
-		
+
 		try {
 			file.createNewFile();
 			return RETVAL.OK;
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return RETVAL.CLIENT_ERROR;
 		}
-		
-		
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Delete a file providing the filePath
 	 * @param filePath
@@ -138,6 +137,94 @@ public class TFSClient extends Client {
 		return null;
 	}
 
+
+
+	/**
+	 * Read the data from a file at a specific location and length
+	 * @param filePath
+	 * @param offset
+	 * @param dataLength
+	 * @return
+	 */
+	public Message read(String filePath, int offset, int dataLength) {
+
+		filePath = "C:\\CS485\\" + filePath;
+
+		Message msg = new Message(OPERATION.READ_FILE, SENDER.CHUNK_SERVER, filePath);
+
+		byte[] stream = null;
+		try {
+			RandomAccessFile file = new RandomAccessFile(filePath, "r");
+			file.read(stream, offset, dataLength);
+
+			msg.bytes = stream;
+			msg.retValue = RETVAL.OK;
+			return msg;
+		} catch (Exception e) {
+			msg.bytes = null;
+			msg.retValue = RETVAL.NOT_FOUND;
+			return msg;
+		}		
+	}
+
+	public boolean checkFileSystemLocally(String filePath){
+
+		File file = new File(filePath);	
+		return file.exists();
+
+	}
+
+	public RETVAL writeFileLocally(String filePath, byte bytes[]){
+		
+		try {
+
+			System.out.println("APPEND: " + filePath);
+
+			//filePath = "C:\\CS485\\" + filePath;
+
+			File file = new File(filePath);
+
+			//TODO SHOULD RECEIVE INFORMATION FROM SERVER AND BE ADDED TO END		
+			//Create file if it doesnt exist
+			if(!file.exists()){
+				return RETVAL.NOT_FOUND;
+			} else {
+
+				FileOutputStream output = new FileOutputStream(filePath, true);
+				try {
+					output.write(bytes);
+				} finally {
+					output.close();
+				}
+
+				return RETVAL.OK;
+			}
+		} catch (Exception e) {
+			return RETVAL.ERROR;
+		}	
+		
+	}
+	
+	public Message readFileLocally(String filePath){
+
+		byte[] data = SerializationHelper.getBytesFromFile(filePath);
+
+
+
+		Message msg = new Message(OPERATION.READ_FILE, SENDER.CHUNK_SERVER, filePath);
+
+		if(data == null)
+			msg.retValue = RETVAL.NOT_FOUND;
+		else
+			msg.retValue = RETVAL.OK;
+
+		msg.bytes = data;
+
+
+		return msg;
+
+	}
+
 	/**
 	 * Append a byte array to the end of the file.
 	 * @param filePath path of this file in the TFS
@@ -146,21 +233,27 @@ public class TFSClient extends Client {
 	 */
 	public RETVAL append(String filePath, byte[] bytes) {
 		try {
-			
+
 			System.out.println("APPEND: " + filePath);
-			
+
 			//filePath = "C:\\CS485\\" + filePath;
-			
+
 			File file = new File(filePath);
+
+			int length = bytes.length;
+
+			byte header [] = ByteBuffer.allocate(4).putInt(length).array();
+
 
 			//TODO SHOULD RECEIVE INFORMATION FROM SERVER AND BE ADDED TO END		
 			//Create file if it doesnt exist
 			if(!file.exists()){
 				return RETVAL.NOT_FOUND;
 			} else {
-				
+
 				FileOutputStream output = new FileOutputStream(filePath, true);
 				try {
+					output.write(header); //TODO
 					output.write(bytes);
 				} finally {
 					output.close();
@@ -174,69 +267,34 @@ public class TFSClient extends Client {
 	}
 
 	/**
-	 * Read the data from a file at a specific location and length
-	 * @param filePath
-	 * @param offset
-	 * @param dataLength
-	 * @return
-	 */
-	public Message read(String filePath, int offset, int dataLength) {
-		
-		filePath = "C:\\CS485\\" + filePath;
-		
-		Message msg = new Message(OPERATION.READ_FILE, SENDER.CHUNK_SERVER, filePath);
-		
-		byte[] stream = null;
-		try {
-			RandomAccessFile file = new RandomAccessFile(filePath, "r");
-			file.read(stream, offset, dataLength);
-			
-			msg.bytes = stream;
-			msg.retValue = RETVAL.OK;
-			return msg;
-		} catch (Exception e) {
-			msg.bytes = null;
-			msg.retValue = RETVAL.NOT_FOUND;
-			return msg;
-		}		
-	}
-
-	public boolean checkFileSystemLocally(String filePath){
-		
-		File file = new File(filePath);	
-		return file.exists();
-		
-	}
-	
-	
-	/**
 	 * Read all the data from a tfs file
 	 * @param filePath
 	 * @return
 	 */
 	public Message read(String filePath) {
-		
+
 		filePath = "C:\\CS485\\" + filePath;
-		
+
 		Message msg = new Message(OPERATION.READ_FILE, SENDER.CHUNK_SERVER, filePath);
 		msg.printMessage();
-		
-		byte[] stream = SerializationHelper.getBytesFromFile(filePath);
-		
+
+		byte[] stream = SerializationHelper.getBytesFromFileWithOffset(filePath); //TODO
+
+		//byte[] stream = SerializationHelper.getBytesFromFile(filePath);
+
 		msg.bytes = stream;
-		
+
 		if(stream == null)
 		{
-			msg.retValue = RETVAL.NOT_FOUND;
-			
+			msg.retValue = RETVAL.NOT_FOUND;	
 		}
 		else
 		{
 			msg.retValue = RETVAL.OK;
 		}
-		
+
 		return msg;
-			
+
 	}
 
 	/**

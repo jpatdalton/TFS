@@ -1,5 +1,10 @@
-import tfsclient.TFSClient;
-import helpers.SerializationHelper;
+
+package TestCases;
+
+import Helpers.*;
+import MainApplications.*;
+import Enums.*;
+import Message.*;
 
 /**
  * Test 6: Append the size and content of a file stored on the local machine in a target TFS file specified by its path
@@ -18,11 +23,16 @@ public class Test6 extends Test {
 	}
 
 	@Override
-	public int execute() {
-		byte[] data = SerializationHelper.getBytesFromFile(localPath);
+	public RETVAL execute() {
 		
-		if (data == null)
-			return TFSClient.CLIENT_ERROR;
+		Message msg = tfsClient.readFileLocally(localPath);
+		
+		if (msg.bytes == null)
+			return RETVAL.NOT_FOUND;
+		
+		tfsClient.createFile(tfsPath, 1000);
+		
+		
 		
 		int ret = tfsClient.append(tfsPath, data);
 
@@ -44,7 +54,7 @@ public class Test6 extends Test {
 		
 		Test6 test = new Test6(masterIpAddress, masterPort, localPath, tfsPath);
 		
-		int ret = test.execute();
+		RETVAL ret = test.execute();
 		test.handleError(ret);
 			
 		System.out.println(test.getMessage());

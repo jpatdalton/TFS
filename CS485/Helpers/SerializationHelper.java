@@ -1,6 +1,10 @@
 package Helpers;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,4 +22,28 @@ public class SerializationHelper {
 		
 		return data;
 	}
+	
+	public static byte[] getBytesFromFileWithOffset(String inputPath) {
+		byte[] data = null;
+		
+		byte header [] = new byte [4];
+		
+		try {
+			
+			File file = new File(inputPath);
+			FileInputStream input = new FileInputStream(file);
+			input.read(header);
+			
+			ByteBuffer bb = ByteBuffer.wrap(header);
+			int dataSize = bb.getInt();
+			data = new byte[dataSize];
+			input.read(data);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return data;
+	}
+	
 }

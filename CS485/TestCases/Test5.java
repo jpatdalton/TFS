@@ -38,7 +38,7 @@ public class Test5 extends Test {
 			return RETVAL.EXISTS;
 		}	
 		
-		ret = tfsClient.append(tfsPath, data);
+		ret = tfsClient.append("C:\\CS485\\" + tfsPath, data);
 		System.out.println(ret.toString());
 		
 		/****************** END TEST 4 ****************/
@@ -63,7 +63,7 @@ public class Test5 extends Test {
 		if(ret == RETVAL.EXISTS || ret == RETVAL.CLIENT_ERROR)
 			return ret;
 		
-		ret = tfsClient.append(localPath, data);
+		ret = tfsClient.writeFileLocally(localPath, data);
 
 		return ret;
 		

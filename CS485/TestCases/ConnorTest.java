@@ -4,9 +4,12 @@ package TestCases;
 import Enums.RETVAL;
 import MainApplications.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.*;
 
+import Message.*;
 
 public class ConnorTest {
 
@@ -16,8 +19,35 @@ public class ConnorTest {
 	public static void main(String[] args) {
 
 		TFSClient client = new TFSClient();
-
-		RETVAL ret = client.createDir("1");
+		
+		Message msg = client.readFileLocally("C:\\TestData\\Test.txt");
+		
+		System.out.println(msg.retValue.toString());
+				
+		byte data [] = msg.bytes;
+		
+		client.createFile("file1.txt", 1000);
+		
+		client.append("C:\\CS485\\file1.txt", data);
+		
+		Message m = client.read("file1.txt");
+		
+		data = m.bytes;
+		
+		File file = new File("C:\\TestData\\Test1.txt");
+		try {
+			file.createNewFile();
+		
+		FileOutputStream output = new FileOutputStream("C:\\TestData\\Test1.txt", true);
+		output.write(data);
+		output.close();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		/*RETVAL ret = client.createDir("1");
 		System.out.println(ret.toString());
 
 		ret = client.createFile("1\\file1", 1000);
@@ -41,7 +71,7 @@ public class ConnorTest {
 		}
 		
 		client.append("1\\file1", data);
-		
+		*/
 		
 				/*
 		RETVAL ret = client.createDir("1");
