@@ -22,19 +22,20 @@ public class Test4 extends Test {
 		
 		if (data == null)
 			return RETVAL.CLIENT_ERROR;
-		
-		TFSClient client = new TFSClient();
 
-		RETVAL ret = client.createDir("1");
+		RETVAL ret = tfsClient.createDir("1");
 		System.out.println(ret.toString());
 
-		ret = client.createFile("1\\file1", 1000);
+		ret = tfsClient.createFile(tfsPath, 1000);
+		System.out.println(ret.toString());
+		
 		if(ret == RETVAL.EXISTS){
 			System.out.println("FILE ALREADY EXISTS. CANNOT APPEND");
 			return RETVAL.EXISTS;
 		}	
 		
-		ret = client.append("1\\file1", data);
+		ret = tfsClient.append(tfsPath, data);
+		System.out.println(ret.toString());
 
 		return ret;
 	}
@@ -57,7 +58,7 @@ public class Test4 extends Test {
 		RETVAL ret = test.execute();
 		test.handleError(ret);
 			
-		System.out.println(test.getMessage());
+		System.out.println("WHOLE TEST: " + test.getMessage());
 	}		
 	
 

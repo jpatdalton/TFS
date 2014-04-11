@@ -28,10 +28,11 @@ public class ServerClient implements Runnable {
 			msg.printMessage();
 
 			oos = new ObjectOutputStream(s.getOutputStream());
+			msg.sender = SENDER.MASTER;
 			WriteStream(msg);
 
-			msg = (Message) ReadStream();
-			msg.printMessage();
+			//msg = (Message) ReadStream();
+			//msg.printMessage();
 
 		}
 		catch(Exception e){
@@ -335,8 +336,10 @@ public class ServerClient implements Runnable {
 			addFile(absolutePath);
 			
 			ret = RETVAL.OK;
-			
+		
 		}
+		
+		
 		
 		return ret;
 
