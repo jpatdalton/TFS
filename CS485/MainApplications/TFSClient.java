@@ -8,6 +8,7 @@ import java.util.Random;
 import Threads.*;
 import Message.*;
 import Enums.*;
+import Helpers.*;
 
 public class TFSClient extends Client {
 
@@ -68,6 +69,27 @@ public class TFSClient extends Client {
 		return msg.retValue;
 	}
 
+	public RETVAL createFileLocally(String filePath){
+		
+		File file = new File(filePath);
+		if(file.exists())
+			return RETVAL.EXISTS;
+		
+		try {
+			file.createNewFile();
+			return RETVAL.OK;
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return RETVAL.CLIENT_ERROR;
+		}
+		
+		
+		
+	}
+	
+	
 	/**
 	 * Delete a file providing the filePath
 	 * @param filePath
@@ -127,7 +149,7 @@ public class TFSClient extends Client {
 			
 			System.out.println("APPEND: " + filePath);
 			
-			filePath = "C:\\CS485\\" + filePath;
+			//filePath = "C:\\CS485\\" + filePath;
 			
 			File file = new File(filePath);
 
@@ -158,25 +180,63 @@ public class TFSClient extends Client {
 	 * @param dataLength
 	 * @return
 	 */
-	public byte[] read(String filePath, int offset, int dataLength) {
+	public Message read(String filePath, int offset, int dataLength) {
+		
+		filePath = "C:\\CS485\\" + filePath;
+		
+		Message msg = new Message(OPERATION.READ_FILE, SENDER.CHUNK_SERVER, filePath);
+		
 		byte[] stream = null;
 		try {
 			RandomAccessFile file = new RandomAccessFile(filePath, "r");
 			file.read(stream, offset, dataLength);
-			return stream;
+			
+			msg.bytes = stream;
+			msg.retValue = RETVAL.OK;
+			return msg;
 		} catch (Exception e) {
-			return stream;
+			msg.bytes = null;
+			msg.retValue = RETVAL.NOT_FOUND;
+			return msg;
 		}		
 	}
 
-
+	public boolean checkFileSystemLocally(String filePath){
+		
+		File file = new File(filePath);	
+		return file.exists();
+		
+	}
+	
+	
 	/**
 	 * Read all the data from a tfs file
 	 * @param filePath
 	 * @return
 	 */
-	public byte[] read(String filePath) {
-		return null;
+	public Message read(String filePath) {
+		
+		filePath = "C:\\CS485\\" + filePath;
+		
+		Message msg = new Message(OPERATION.READ_FILE, SENDER.CHUNK_SERVER, filePath);
+		msg.printMessage();
+		
+		byte[] stream = SerializationHelper.getBytesFromFile(filePath);
+		
+		msg.bytes = stream;
+		
+		if(stream == null)
+		{
+			msg.retValue = RETVAL.NOT_FOUND;
+			
+		}
+		else
+		{
+			msg.retValue = RETVAL.OK;
+		}
+		
+		return msg;
+			
 	}
 
 	/**
