@@ -11,6 +11,7 @@ import MainApplications.*;
 import Message.*;
 import Enums.*;
 import FileSystem.*;
+import Helpers.*;
 
 public class ServerClient implements Runnable {
 
@@ -50,7 +51,13 @@ public class ServerClient implements Runnable {
 		while(true){
 			try{
 				Message msg = (Message) ReadStream();
-				DecipherMsg(msg);
+				
+				if(msg!=null)
+				{
+					DecipherMsg(msg);
+					
+				}
+				//else
 			}
 			catch(Exception e){
 			}
@@ -343,30 +350,54 @@ public class ServerClient implements Runnable {
 
 		case CREATE_DIR:
 			msg.retValue = createDir(msg.absolutePath);
+			//TODO create log
+
 			WriteStream(msg);
 			break;
 
 		case DELETE_DIR:
 			msg.retValue = delete(master.root.name + "\\" + msg.absolutePath);
+			//TODO create log 
+			
 			WriteStream(msg);
 			break;
 
 		case DELETE_FILE:
 			msg.retValue = delete(master.root.name + "\\" + msg.absolutePath);
+			//TODO create log
+			
 			WriteStream(msg);
 			break;
 
 		case CREATE_FILE:
 			msg.retValue = createFile(msg.absolutePath, msg.fileSize);
+			//TODO create log
+			
 			WriteStream(msg);
 			break;
 			
 		case APPEND:
 
 			//TODO SHOULD TECHINCALLY JUST SEND THE INFO BACK AND SEE IF IT EXISTS FOR THE PERSON
+			
+			//TODO create log
+			
 			break;
 		}
 
+		if(msg.retValue == RETVAL.OK)
+		{		
+			String command;
+			command = msg.operation.toString();
+			
+			String path;
+			path = msg.absolutePath;
+			
+			String logString;
+			logString = command + " " + path;
+			
+			LogHelper.logRecord(logString);
+		}
 
 
 

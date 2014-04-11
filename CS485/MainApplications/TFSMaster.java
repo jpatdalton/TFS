@@ -38,6 +38,7 @@ public class TFSMaster implements Runnable {
 
 		// TODO CLEAN OUT ROOT PER EACH RUN		
 		root = new TFSDir("C:\\CS485", null);
+		
 
 	}
 
