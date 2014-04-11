@@ -124,15 +124,19 @@ public class TFSClient extends Client {
 	 */
 	public RETVAL append(String filePath, byte[] bytes) {
 		try {
+			
+			System.out.println("APPEND: " + filePath);
+			
+			filePath = "C:\\CS485\\" + filePath;
+			
 			File file = new File(filePath);
 
-			//TODO SHOULD RECEIVE INFORMATION FROM SERVER AND BE ADDED TO END
-			
+			//TODO SHOULD RECEIVE INFORMATION FROM SERVER AND BE ADDED TO END		
 			//Create file if it doesnt exist
 			if(!file.exists()){
 				return RETVAL.NOT_FOUND;
 			} else {
-
+				
 				FileOutputStream output = new FileOutputStream(filePath, true);
 				try {
 					output.write(bytes);

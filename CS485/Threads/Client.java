@@ -32,18 +32,18 @@ public abstract class Client implements Runnable {
 		
 			oos = new ObjectOutputStream(socket.getOutputStream());
 			
-			Message msg = new Message(OPERATION.CREATE_DIR, SENDER.CLIENT, "PATH"); // TODO MAKE BLANK
+			Message msg = new Message(OPERATION.INITIALIZE, SENDER.CLIENT, "INITIALIZE"); // TODO MAKE BLANK
 			Write(msg);
 			
 			ois = new ObjectInputStream(socket.getInputStream());
 			msg = (Message) ReadStream();
 			msg.printMessage();
 			
-			msg.operation = OPERATION.APPEND;
+			//msg.operation = OPERATION.APPEND;
 			
-			Write(msg);
+			//Write(msg);
 			
-			Write(msg);
+			//Write(msg);
 			
 			
 			

@@ -15,7 +15,6 @@ import Helpers.*;
 
 public class ServerClient implements Runnable {
 
-
 	ObjectOutputStream oos = null;
 	ObjectInputStream ois = null;
 
@@ -30,10 +29,11 @@ public class ServerClient implements Runnable {
 			msg.printMessage();
 
 			oos = new ObjectOutputStream(s.getOutputStream());
+			msg.sender = SENDER.MASTER;
 			WriteStream(msg);
 
-			msg = (Message) ReadStream();
-			msg.printMessage();
+			//msg = (Message) ReadStream();
+			//msg.printMessage();
 
 		}
 		catch(Exception e){
@@ -309,6 +309,9 @@ public class ServerClient implements Runnable {
 			dir.mkdir();
 
 			addDirectory(absolutePath);
+			
+			ret = RETVAL.OK;
+			
 		}
 
 		return ret;
@@ -324,9 +327,13 @@ public class ServerClient implements Runnable {
 				
 				//File file = new File(path);
 				
-				RandomAccessFile f = new RandomAccessFile(path, "rwd");
-				f.setLength(fileSize);
-				f.close();
+				File file = new File(path);
+				file.createNewFile();
+				
+				
+				//RandomAccessFile f = new RandomAccessFile(path, "rwd");
+				//f.setLength(fileSize);
+				//f.close();
 			} 
 			catch (Exception e) {
 				System.err.println(e);
@@ -334,7 +341,12 @@ public class ServerClient implements Runnable {
 			}
 
 			addFile(absolutePath);
+			
+			ret = RETVAL.OK;
+		
 		}
+		
+		
 		
 		return ret;
 

@@ -1,5 +1,9 @@
-import tfsclient.TFSClient;
-import helpers.*;
+
+package TestCases;
+
+import Enums.RETVAL;
+import MainApplications.*;
+import Helpers.*;
 
 public class Test4 extends Test {
 	String localPath;
@@ -13,21 +17,25 @@ public class Test4 extends Test {
 	}
 
 	@Override
-	public int execute() {
+	public RETVAL execute() {
 		byte[] data = SerializationHelper.getBytesFromFile(localPath);
 		
 		if (data == null)
-			return TFSClient.CLIENT_ERROR;
+			return RETVAL.CLIENT_ERROR;
+
+		RETVAL ret = tfsClient.createDir("1");
+		System.out.println(ret.toString());
+
+		ret = tfsClient.createFile(tfsPath, 1000);
+		System.out.println(ret.toString());
 		
-		String[] paths = tfsPath.split("/");
-		String fileName = paths[paths.length - 1];
-		String dirPath = tfsPath.substring(0, tfsPath.length() - fileName.length());
-		
-		int ret = tfsClient.createFile(fileName, dirPath);
-		if (ret != TFSClient.OK)
-			return ret;
+		if(ret == RETVAL.EXISTS){
+			System.out.println("FILE ALREADY EXISTS. CANNOT APPEND");
+			return RETVAL.EXISTS;
+		}	
 		
 		ret = tfsClient.append(tfsPath, data);
+		System.out.println(ret.toString());
 
 		return ret;
 	}
@@ -45,12 +53,12 @@ public class Test4 extends Test {
 		String masterIpAddress = "";
 		int masterPort = 0;
 		
-		Test4 test = new Test4(masterIpAddress, masterPort, localPath, tfsPath);
+		Test4 test = new Test4(masterIpAddress, masterPort, tfsPath, localPath);
 		
-		int ret = test.execute();
+		RETVAL ret = test.execute();
 		test.handleError(ret);
 			
-		System.out.println(test.getMessage());
+		System.out.println("WHOLE TEST: " + test.getMessage());
 	}		
 	
 
