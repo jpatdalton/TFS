@@ -1,6 +1,7 @@
 package Helpers;
 
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 
 /**
@@ -10,7 +11,7 @@ import java.io.FileWriter;
  */
 public class LogHelper {
 	// log-record file name is set up internally
-	private static final String LOG_RECORD_PATH = "C:/485log/LOG_RECORDS.txt";
+	public static final String LOG_RECORD_PATH = "C:/485log/LOG_RECORDS.txt";
 	
 	// use for debug purposes
 	private static final String LOG_DEBUG = "C:/485log/LOG_DEBUG.txt";
@@ -25,14 +26,14 @@ public class LogHelper {
 	public static boolean logRecord(String log) {
 		try {
 			// create or open file 
-			FileWriter fstream = new FileWriter(LOG_RECORD_PATH);
-			BufferedWriter out = new BufferedWriter(fstream);
+			FileOutputStream output = new FileOutputStream(LOG_RECORD_PATH, true);
 			
 			// append a log record to file 
-			out.write(log + "\r\n");
+			log = log + "\r\n";
+			output.write(log.getBytes());
 			
 			// close the output stream
-			out.close();
+			output.close();
 			
 			return true;
 		} catch (Exception e){	// catch exception if any

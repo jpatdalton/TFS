@@ -20,6 +20,11 @@ public class ServerClient implements Runnable {
 
 	TFSMaster master;
 
+	public ServerClient(TFSMaster master){
+		
+		this.master = master;
+	}
+	
 	public ServerClient(Socket s, TFSMaster master)
 	{
 		try{
@@ -245,7 +250,7 @@ public class ServerClient implements Runnable {
 	 */
 
 
-	private RETVAL delete(String path) {
+	public RETVAL delete(String path) {
 		File dir = new File(path);
 
 		System.out.println("PATH: " + path);

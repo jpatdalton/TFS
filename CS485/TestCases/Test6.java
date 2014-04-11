@@ -26,24 +26,24 @@ public class Test6 extends Test {
 	public RETVAL execute() {
 
 		RETVAL ret = RETVAL.DEFAULT;
-		
-		for(int i = 0; i < 6; i++){
 
-			Message msg = tfsClient.readFileLocally(localPath);
 
-			if(msg.retValue != RETVAL.OK)
-				return msg.retValue;
 
-			byte data [] = msg.bytes;
+		Message msg = tfsClient.readFileLocally(localPath);
 
-			ret = tfsClient.createFile(tfsPath, 1000);
+		if(msg.retValue != RETVAL.OK)
+			return msg.retValue;
 
-			if(ret == RETVAL.ERROR)
-				return RETVAL.ERROR;
+		byte data [] = msg.bytes;
 
-			ret = tfsClient.append(tfsPath, data);
-			
-		}
+		ret = tfsClient.createFile(tfsPath, 1000);
+
+		if(ret == RETVAL.ERROR)
+			return RETVAL.ERROR;
+
+		ret = tfsClient.append(tfsPath, data);
+
+
 		return ret;
 	}
 
