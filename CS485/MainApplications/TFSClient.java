@@ -4,6 +4,7 @@ package MainApplications;
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Random;
 
 import Threads.*;
@@ -209,8 +210,6 @@ public class TFSClient extends Client {
 
 		byte[] data = SerializationHelper.getBytesFromFile(filePath);
 
-
-
 		Message msg = new Message(OPERATION.READ_FILE, SENDER.CHUNK_SERVER, filePath);
 
 		if(data == null)
@@ -225,6 +224,9 @@ public class TFSClient extends Client {
 
 	}
 
+	
+
+	
 	/**
 	 * Append a byte array to the end of the file.
 	 * @param filePath path of this file in the TFS
@@ -236,25 +238,28 @@ public class TFSClient extends Client {
 
 			System.out.println("APPEND: " + filePath);
 
-			//filePath = "C:\\CS485\\" + filePath;
+			filePath = "C:\\CS485\\" + filePath;
 
 			File file = new File(filePath);
 
 			int length = bytes.length;
 
+			int fileLength = (int)file.length();
+			
 			byte header [] = ByteBuffer.allocate(4).putInt(length).array();
-
 
 			//TODO SHOULD RECEIVE INFORMATION FROM SERVER AND BE ADDED TO END		
 			//Create file if it doesnt exist
 			if(!file.exists()){
 				return RETVAL.NOT_FOUND;
 			} else {
-
+				
 				FileOutputStream output = new FileOutputStream(filePath, true);
 				try {
+					
 					output.write(header); //TODO
 					output.write(bytes);
+					
 				} finally {
 					output.close();
 				}
@@ -297,6 +302,23 @@ public class TFSClient extends Client {
 
 	}
 
+	ArrayList<String> getSubdirectories(String absolutePath){
+		
+		File file = new File(absolutePath);
+		ArrayList<String> subdirectories = new ArrayList();
+		
+		if(file.exists() && file.isDirectory()){
+			File [] names = file.listFiles();
+			for(File f: names){
+				if(f.isDirectory())
+					subdirectories.add(f.getAbsolutePath());
+			}
+		}
+		
+		return subdirectories;
+
+	}
+	
 	/**
 	 * Counting the number of replicas for this file
 	 * @param filePath path of this file in the TFS

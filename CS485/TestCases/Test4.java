@@ -34,7 +34,7 @@ public class Test4 extends Test {
 			return RETVAL.EXISTS;
 		}	
 		
-		ret = tfsClient.append("C:\\CS485\\" + tfsPath, data);
+		ret = tfsClient.append(tfsPath, data);
 		System.out.println(ret.toString());
 
 		return ret;

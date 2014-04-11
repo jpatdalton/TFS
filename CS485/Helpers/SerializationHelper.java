@@ -27,7 +27,6 @@ public class SerializationHelper {
 		byte[] data = null;
 		
 		byte header [] = new byte [4];
-		
 		try {
 			
 			File file = new File(inputPath);
@@ -38,10 +37,12 @@ public class SerializationHelper {
 			int dataSize = bb.getInt();
 			data = new byte[dataSize];
 			input.read(data);
+			input.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		
 		return data;
 	}

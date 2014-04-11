@@ -28,7 +28,8 @@ public class ConnorTest {
 		
 		client.createFile("file1.txt", 1000);
 		
-		client.append("C:\\CS485\\file1.txt", data);
+		client.append("file1.txt", data);
+		client.append("file1.txt", data);
 		
 		Message m = client.read("file1.txt");
 		
