@@ -9,6 +9,9 @@ import java.io.FileWriter;
  * @author Nguyen
  *s
  */
+
+//Test comment line for Github
+
 public class LogHelper {
 	// log-record file name is set up internally
 	public static final String LOG_RECORD_PATH = "C:/485log/LOG_RECORDS.txt";
