@@ -126,13 +126,12 @@ public class TFSClient extends Client {
 		try {
 			File file = new File(filePath);
 
-			//TODO SHOULD RECEIVE INFORMATION FROM SERVER AND BE ADDED TO END
-			
+			//TODO SHOULD RECEIVE INFORMATION FROM SERVER AND BE ADDED TO END		
 			//Create file if it doesnt exist
 			if(!file.exists()){
 				return RETVAL.NOT_FOUND;
 			} else {
-
+				
 				FileOutputStream output = new FileOutputStream(filePath, true);
 				try {
 					output.write(bytes);

@@ -317,9 +317,13 @@ public class ServerClient implements Runnable {
 				
 				//File file = new File(path);
 				
-				RandomAccessFile f = new RandomAccessFile(path, "rwd");
-				f.setLength(fileSize);
-				f.close();
+				File file = new File(path);
+				file.createNewFile();
+				
+				
+				//RandomAccessFile f = new RandomAccessFile(path, "rwd");
+				//f.setLength(fileSize);
+				//f.close();
 			} 
 			catch (Exception e) {
 				System.err.println(e);
