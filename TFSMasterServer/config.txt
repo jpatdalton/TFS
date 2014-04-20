@@ -1,0 +1,8 @@
+# Configuration file
+# TFS Master Server
+maxreplicas = 3
+
+# Set of chunk servers
+chunkserver = 127.0.0.1 11331
+chunkserver = 127.0.0.1 11332
+chunkserver = 127.0.0.1 11333
